@@ -15,7 +15,7 @@
  */
 
 #define LOG_TAG "APM::EffectDescriptor"
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 
 #include "EffectDescriptor.h"
 #include <utils/String8.h>
