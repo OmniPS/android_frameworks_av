@@ -15,7 +15,7 @@
  */
 
 #define LOG_TAG "APM::VolumeCurve"
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 
 #include "VolumeCurve.h"
 #include "TypeConverter.h"
