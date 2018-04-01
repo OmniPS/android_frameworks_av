@@ -60,10 +60,16 @@ status_t Parameters::initialize(const CameraMetadata *info, int deviceVersion,
     mDeviceVersion = deviceVersion;
 
     res = buildFastInfo();
-    if (res != OK) return res;
+    if (res != OK) { 
+        ALOGE("%s: buildFastInfo error %d", __FUNCTION__,res);
+        return res;
+    }
 
     res = buildQuirks();
-    if (res != OK) return res;
+    if (res != OK) {
+        ALOGE("%s: buildQuirks error %d", __FUNCTION__,res);
+        return res;
+    }
 
     const Size MAX_PREVIEW_SIZE = { MAX_PREVIEW_WIDTH, MAX_PREVIEW_HEIGHT };
     // Treat the H.264 max size as the max supported video size.
@@ -89,9 +95,16 @@ status_t Parameters::initialize(const CameraMetadata *info, int deviceVersion,
     const Size VIDEO_SIZE_UPPER_BOUND = {maxVideoWidth, maxVideoHeight};
 
     res = getFilteredSizes(MAX_PREVIEW_SIZE, &availablePreviewSizes);
-    if (res != OK) return res;
+    if (res != OK) { 
+
+        ALOGE("%s: getFilteredSizes error %d", __FUNCTION__,res);
+        return res;
+    }
     res = getFilteredSizes(VIDEO_SIZE_UPPER_BOUND, &availableVideoSizes);
-    if (res != OK) return res;
+    if (res != OK) {
+        ALOGE("%s: getFilteredSizes error %d", __FUNCTION__,res);
+        return res;
+    }
 
     // Select initial preview and video size that's under the initial bound and
     // on the list of both preview and recording sizes
@@ -288,7 +301,10 @@ status_t Parameters::initialize(const CameraMetadata *info, int deviceVersion,
     }
 
     Vector<Size> availableJpegSizes = getAvailableJpegSizes();
-    if (!availableJpegSizes.size()) return NO_INIT;
+    if (!availableJpegSizes.size()) {
+        ALOGE("%s: availableJpegSizes error", __FUNCTION__);
+        return NO_INIT;
+    }
 
     // TODO: Pick maximum
     pictureWidth = availableJpegSizes[0].width;
@@ -749,7 +765,10 @@ status_t Parameters::initialize(const CameraMetadata *info, int deviceVersion,
 
     camera_metadata_ro_entry_t max3aRegions = staticInfo(ANDROID_CONTROL_MAX_REGIONS,
             Parameters::NUM_REGION, Parameters::NUM_REGION);
-    if (max3aRegions.count != Parameters::NUM_REGION) return NO_INIT;
+    if (max3aRegions.count != Parameters::NUM_REGION) {
+        ALOGE("%s: max3aRegions error", __FUNCTION__);
+        return NO_INIT;
+    }
 
     int32_t maxNumFocusAreas = 0;
     if (focusMode != Parameters::FOCUS_MODE_FIXED) {
@@ -763,7 +782,10 @@ status_t Parameters::initialize(const CameraMetadata *info, int deviceVersion,
 
     camera_metadata_ro_entry_t availableFocalLengths =
         staticInfo(ANDROID_LENS_INFO_AVAILABLE_FOCAL_LENGTHS, 0, 0, false);
-    if (!availableFocalLengths.count) return NO_INIT;
+    if (!availableFocalLengths.count) {
+        ALOGE("%s: availableFocalLengths error", __FUNCTION__);
+        return NO_INIT;
+    }
 
     float minFocalLength = availableFocalLengths.data.f[0];
     params.setFloat(CameraParameters::KEY_FOCAL_LENGTH, minFocalLength);
@@ -793,7 +815,10 @@ status_t Parameters::initialize(const CameraMetadata *info, int deviceVersion,
 
     camera_metadata_ro_entry_t exposureCompensationStep =
         staticInfo(ANDROID_CONTROL_AE_COMPENSATION_STEP, 1, 1);
-    if (!exposureCompensationStep.count) return NO_INIT;
+    if (!exposureCompensationStep.count) {
+        ALOGE("%s: exposureCompensationStep error", __FUNCTION__);
+        return NO_INIT;
+    }
 
     params.setFloat(CameraParameters::KEY_EXPOSURE_COMPENSATION_STEP,
             (float)exposureCompensationStep.data.r[0].numerator /
@@ -967,8 +992,10 @@ status_t Parameters::initialize(const CameraMetadata *info, int deviceVersion,
     ALOGI("%s: allowZslMode: %d slowJpegMode %d", __FUNCTION__, allowZslMode, slowJpegMode);
 
     res = qtiParams->initialize((void*)this, mDevice, manager);
-    if(res != OK)
-        return res;
+    if(res != OK) {
+        ALOGE("%s: qtiParams->initialize error %d", __FUNCTION__, res);
+        //return res;
+    }
 
     state = STOPPED;
 
