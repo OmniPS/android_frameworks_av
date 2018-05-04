@@ -15,7 +15,7 @@
  */
 
 #define LOG_TAG "AudioPolicyEffects"
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -241,12 +241,16 @@ status_t AudioPolicyEffects::addOutputSessionEffects(audio_io_handle_t output,
     // create audio processors according to stream
     // FIXME: should we have specific post processing settings for internal streams?
     // default to media for now.
+
+
+    ALOGV("addOutputSessionEffects(): loading effects for stream %d", stream);
+
     if (stream >= AUDIO_STREAM_PUBLIC_CNT) {
         stream = AUDIO_STREAM_MUSIC;
     }
     ssize_t index = mOutputStreams.indexOfKey(stream);
     if (index < 0) {
-        ALOGV("addOutputSessionEffects(): no output processing needed for this stream");
+        ALOGV("addOutputSessionEffects(): no output processing needed for this stream %d", stream);
         return NO_ERROR;
     }
 
