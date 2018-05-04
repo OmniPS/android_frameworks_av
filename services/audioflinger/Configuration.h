@@ -21,7 +21,7 @@
 #define ANDROID_AUDIOFLINGER_CONFIGURATION_H
 
 // uncomment to enable detailed battery usage reporting (not debugged)
-#define ADD_BATTERY_DATA
+//#define ADD_BATTERY_DATA
 
 // uncomment to enable the audio watchdog
 //#define AUDIO_WATCHDOG
