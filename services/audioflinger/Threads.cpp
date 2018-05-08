@@ -4700,7 +4700,7 @@ bool AudioFlinger::MixerThread::checkForNewParameter_l(const String8& keyValuePa
 #ifdef ADD_BATTERY_DATA
         // when changing the audio output device, call addBatteryData to notify
         // the change
-        if (mOutDevice != value) {
+        if (mOutDevice != (audio_devices_t)value) {
             uint32_t params = 0;
             // check whether speaker is on
             if (value & AUDIO_DEVICE_OUT_SPEAKER) {
