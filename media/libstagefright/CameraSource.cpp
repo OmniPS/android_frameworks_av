@@ -352,12 +352,6 @@ static int32_t getHighSpeedFrameRate(const CameraParameters& params) {
 }
 #endif
 
-static int32_t getHighSpeedFrameRate(const CameraParameters& params) {
-    const char* hsr = params.get("video-hsr");
-    int32_t rate = (hsr != NULL && strncmp(hsr, "off", 3)) ? atoi(hsr) : 0;
-    return rate > 240 ? 240 : rate;
-}
-
 /*
  * Configure the camera to use the requested video size
  * (width and height) and/or frame rate. If both width and
